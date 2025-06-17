@@ -26,9 +26,6 @@ func (pk PublicKey) GetBJ() [][]float64 {
 func (sk SecretKey) GetSK() [][]float64 {
     return sk.Sk
 }
-// func (sk SecretKey) GetSI64() [][]float64 {
-//     return sk.si64
-// }
 func (sk SecretKey) GetSI() [][]float64 {
     return sk.Si
 }
@@ -43,37 +40,8 @@ func KeyGen(pp PublicParams) (pkj PublicKey, skj SecretKey) {
 
     // Generate a random binary vector sj of length n
     sj := utils.SampleUniformMatrix(n, 1, 2) // [][]byte of length n x 1
-
-    // sj := skk
-
-    // fmt.Println("sj", sj)
-
-    // fmt.Println("A : ", Abar)
-
-    // fmt.Println("sj: ", sj)
-	// fmt.Println("----------------------------------")
-
-    // Convert sj to a slice of float64 for calculations
-    // sj64 := make([][]float64, n)
-    // for i, v := range sj {
-    //     sj64[i] = make([]float64, 1)
-    //     sj64[i][0] = float64(v[0])
-    // }
-
-    // fmt.Println("sj64: ", sj64)
-	// fmt.Println("----------------------------------")
-
-    // Asj = Abar * sj64 mod q
-    // Abar is m x n, sj64 is n x 1, so Asj will be m x 1
-    // Asj := utils.MultiplyMatricesMod(Abar, sj, float64(q)) 
+    
     Asj := utils.MultiplyMatrices(Abar, sj) // m x 1 matrix
-
-    // fmt.Println("Asj: ", Asj)
-
-    // rAsj, cAsj := len(Asj), len(Asj[0])
-    // fmt.Println("Asj shape: ", rAsj, cAsj)
-    // fmt.Println("Asj: ", Asj)
-	// fmt.Println("----------------------------------")
 
     // bj = round(p * Asj / q) mod p
     bj := make([][]float64, m)
@@ -82,15 +50,6 @@ func KeyGen(pp PublicParams) (pkj PublicKey, skj SecretKey) {
         scaled := math.Round(float64(p)* float64(Asj[i][0]) / float64(q) )
         bj[i][0] = utils.SignedMod(scaled, float64(p)) 
     }
-
-    // fmt.Println("bj: ", bj)
-
-
-
-    // rBj, cBj := len(bj), len(bj[0])
-    // fmt.Println("bj shape: ", rBj, cBj)
-    // fmt.Println("bj: ", bj)
-	// fmt.Println("----------------------------------")
 
     // Public Key pk = [bj | Abar]
     // bj is m x 1, Abar is m x n, so pk will be m x (n+1)
@@ -107,16 +66,7 @@ func KeyGen(pp PublicParams) (pkj PublicKey, skj SecretKey) {
         Matrix: pkMatrix,
         bj: bj,
     }
-    // fmt.Println("pk shape: ", len(pkj.Matrix), len(pkj.Matrix[0]))
-    // fmt.Println("pk: ", pkj)
-	// fmt.Println("----------------------------------")
-
-    // skVector := make([]float64, n+1)
-    // skVector[0] = 1.0
-    // for i := 0; i < n; i++ {
-    //     skVector[i+1] = -float64(p) * float64(sj[i][0])/ float64(q) 
-    // }
-
+    
     // Secret key sk = [1 | -p * sj64 / q]
    sk := make([][]float64, n+1)
    sk[0] = make([]float64, 1)
@@ -126,11 +76,6 @@ func KeyGen(pp PublicParams) (pkj PublicKey, skj SecretKey) {
        sk[i+1][0] = -float64(p) * float64(sj[i][0]) / float64(q)
    }
 
-    // rSk, cSk := len(sk), len(sk[0])
-    // fmt.Println("sk shape: ", rSk, cSk)
-    // fmt.Println("sk: ", sk)
-	// fmt.Println("----------------------------------")
-
 
     skj = SecretKey{
         // si64 : sj64,
@@ -138,11 +83,6 @@ func KeyGen(pp PublicParams) (pkj PublicKey, skj SecretKey) {
         Sk : sk,
         // Vector: skVector,
     }
-
-    // pksk := (utils.MultiplyPkSk(pkMatrix, sk, float64(pp.GetP())))
-	// fmt.Println("dimension of pksk: ", len(pksk), "x", len(pksk[0]))
-	// fmt.Println("pksk: ", pksk)
-	// fmt.Println("----------------------------------")
 
     // // now we need to find (bj - p/q * Asj) mod p
     // tempvar := make([][]float64, m)

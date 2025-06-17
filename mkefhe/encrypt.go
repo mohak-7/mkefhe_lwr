@@ -63,11 +63,7 @@ func Encrypt(epk ExtendedPublicKey, msg uint8, pp PublicParams) CipherText {
 	R := utils.SampleUniformMatrix(m, N, 2)	// [][]float64 of size m x N
 	G := GadgetMatrix(p, q, n, N, l1, l2)	// [][]float64 of size (n+1) x N
 
-	// fmt.Println("B = ", epk.GetMatrix())
-
 	BT := utils.Transpose(epk.GetMatrix())	// [][]float64 of size (n+1) x m
-
-	// fmt.Println(BT)
 
 	var C [][]float64
 	if msg == 1 {
@@ -87,24 +83,7 @@ func Encrypt(epk ExtendedPublicKey, msg uint8, pp PublicParams) CipherText {
 	}
 
 
-	// C0 := make([][]float64, 1)
-	// C0[0] = make([]float64, N)
-	// for i := 0; i < N; i++ {
-	// 	C0[0][i] = C[0][i]
-	// }
-	// C1 := make([][]float64, n)
-	// for i := 0; i < n; i++ {
-	// 	C1[i] = make([]float64, N)
-	// 	for j := 0; j < N; j++ {
-	// 		C1[i][j] = C[i+1][j]
-	// 	}
-	// }
-
-	// fmt.Println("CipherText : ", C)
 	return CipherText{
 		C : C,
-		// c0: C[0:1], // 1 x N row
-		// c1: C[1:n+1], // n x N matrix
 	}
-
 }

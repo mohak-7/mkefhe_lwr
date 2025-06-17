@@ -3,9 +3,6 @@ package utils
 import (
 	// "fmt"
 	"math"
-	// "strconv"
-    // "mkefhe_lwr/mkefhe"
-
 	"golang.org/x/exp/constraints"
 )
 
@@ -45,12 +42,6 @@ func SplitCiphertext(Cstar [][]uint64, n int) ([]uint64, [][]uint64) {
 // }
 
 func Ginv(mat [][]float64, l1, l2, n int) [][]float64 {
-    // p := parameters.GetP()
-    // q := parameters.GetQ()
-    // l1 := parameters.GetL1()
-    // l2 := parameters.GetL2()
-    // n := parameters.GetSmallN()
-
     cols := len(mat[0])
     rows := l2 + n*l1
 
@@ -85,56 +76,6 @@ func Ginv(mat [][]float64, l1, l2, n int) [][]float64 {
     return result
 }
 
-
-// DONT DELETE
-// func Ginv(v [][]float64, p, q uint64, l1, l2, n int) [][]float64 {
-//     cols := len(v[0])
-//     rows := l2 + n*l1
-//     for i := range mat {
-//         mat[i] = make([]float64, cols)
-//     }
-//     // Decompose the first element
-//     for i := 0; i < cols; i++ {
-//         x := math.Mod(v[0][i], float64(p))
-//         for j := 0; j < l2; j++ {
-//             mat[j][i] = math.Mod(x, 2)
-//             x = math.Floor(x / 2)
-//         }
-//     }
-//     // Decompose the remaining elements
-//     for k := 0; k < cols; k++ {
-//         for j := 1; j < n+1; j++ {
-//             x := math.Mod(v[j][k], float64(q))
-//             offset := l2 + (j-1)*l1
-//             for i := 0; i < l1; i++ {
-//                 mat[offset+i][k] = math.Mod(x, 2)
-//                 x = math.Floor(x / 2)
-//             }
-//         }
-//     }
-//     return mat
-// }
-
-
-
-
-// func GinvMatrix(G [][]uint64, p, q uint64, l1, l2, n int) [][]uint64 {
-// 	m := len(G)
-// 	N := len(G[0])
-// 	Ginv := make([][]uint64, m)
-// 	for i := 0; i < m; i++ {
-// 		Ginv[i] = make([]uint64, N)
-// 	}
-
-// 	for i := 0; i < m; i++ {
-// 		Ginv[i][0] = G[i][0] % p
-// 		for j := 1; j < N; j++ {
-// 			Ginv[i][j] = G[i][j] % q
-// 		}
-// 	}
-
-// 	return Ginv
-// }
 
 
 func AddMatrices[T constraints.Integer | constraints.Float](A, B [][]T) [][]T {
