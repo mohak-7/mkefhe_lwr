@@ -41,42 +41,6 @@ func SplitCiphertext(Cstar [][]uint64, n int) ([]uint64, [][]uint64) {
 // 	return mat
 // }
 
-func Ginv(mat [][]float64, l1, l2, n int) [][]float64 {
-    cols := len(mat[0])
-    rows := l2 + n*l1
-
-    result := make([][]float64, rows)
-    for i := range result {
-        result[i] = make([]float64, cols)
-    }
-
-    // decompose the first row
-    for i := 0; i < cols; i++ {
-        // x := math.Mod(mat[0][i], float64(p))
-        x := mat[0][i]
-        for j := 0; j < l2; j++ {
-            result[j][i] = math.Mod(x, 2)
-            x = math.Floor(x / 2)
-        }
-    }
-
-    // decompose the remaining rows
-    for k := 0; k < cols; k++ {
-        for j := 1; j < n+1; j++ {
-            // x := math.Mod(mat[j][k], float64(q))
-            x := mat[j][k]
-            offset := l2 + (j-1)*l1
-            for i := 0; i < l1; i++ {
-                result[offset+i][k] = math.Mod(x, 2)
-                x = math.Floor(x / 2)
-            }
-        }
-    }
-
-    return result
-}
-
-
 
 func AddMatrices[T constraints.Integer | constraints.Float](A, B [][]T) [][]T {
 	m := len(A)
@@ -89,6 +53,19 @@ func AddMatrices[T constraints.Integer | constraints.Float](A, B [][]T) [][]T {
 		}
 	}
 	return result
+}
+
+func SubtractMatrices[T constraints.Integer | constraints.Float](A, B [][]T) [][]T {
+    m := len(A)
+    n := len(A[0])
+    result := make([][]T, m)
+    for i := 0; i < m; i++ {
+        result[i] = make([]T, n)
+        for j := 0; j < n; j++ {
+            result[i][j] = A[i][j] - B[i][j]
+        }
+    }
+    return result
 }
 
 func MultiplyMatrices[T constraints.Integer | constraints.Float](A, B [][]T) [][]T {
@@ -230,4 +207,70 @@ func UnsignedMod[T constraints.Integer | constraints.Float](x, q T) T {
         return T(r + float64(q))
     }
     return T(r)
+}
+
+func GadgetVector(l float64, m uint64) []float64 {
+	vec := make([]float64, int(l))
+	for i := 0; i < int(l); i++ {
+		vec[i] = float64((1 << i) % int(m))
+	}
+	return vec
+}
+
+func GadgetMatrix(p, q uint64, n, N, l1, l2 int) [][]float64 {
+	g1 := GadgetVector(float64(l1), q)
+	g2 := GadgetVector(float64(l2), p)
+
+	G := make([][]float64, n+1)
+	for i := range G {
+		G[i] = make([]float64, N)
+	}
+
+	for i := 0; i < l2; i++ {
+		G[0][i] = g2[i]
+	}
+
+	for block := 0; block < n; block++ {
+		offset := 1 + block
+		for i := 0; i < l1; i++ {
+			G[offset][l1*block+l2+i] = g1[i]
+		}
+	}
+
+	return G
+}
+
+func Ginv(mat [][]float64, l1, l2, n int) [][]float64 {
+    cols := len(mat[0])
+    rows := l2 + n*l1
+
+    result := make([][]float64, rows)
+    for i := range result {
+        result[i] = make([]float64, cols)
+    }
+
+    // decompose the first row
+    for i := 0; i < cols; i++ {
+        // x := math.Mod(mat[0][i], float64(p))
+        x := mat[0][i]
+        for j := 0; j < l2; j++ {
+            result[j][i] = math.Mod(x, 2)
+            x = math.Floor(x / 2)
+        }
+    }
+
+    // decompose the remaining rows
+    for k := 0; k < cols; k++ {
+        for j := 1; j < n+1; j++ {
+            // x := math.Mod(mat[j][k], float64(q))
+            x := mat[j][k]
+            offset := l2 + (j-1)*l1
+            for i := 0; i < l1; i++ {
+                result[offset+i][k] = math.Mod(x, 2)
+                x = math.Floor(x / 2)
+            }
+        }
+    }
+
+    return result
 }

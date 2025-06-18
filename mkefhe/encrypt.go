@@ -5,37 +5,6 @@ import (
 	"mkefhe_lwr/utils"
 )
 
-func GadgetVector(l float64, m uint64) []float64 {
-	vec := make([]float64, int(l))
-	for i := 0; i < int(l); i++ {
-		vec[i] = float64((1 << i) % int(m))
-	}
-	return vec
-}
-
-func GadgetMatrix(p, q uint64, n, N, l1, l2 int) [][]float64 {
-	g1 := GadgetVector(float64(l1), q)
-	g2 := GadgetVector(float64(l2), p)
-
-	G := make([][]float64, n+1)
-	for i := range G {
-		G[i] = make([]float64, N)
-	}
-
-	for i := 0; i < l2; i++ {
-		G[0][i] = g2[i]
-	}
-
-	for block := 0; block < n; block++ {
-		offset := 1 + block
-		for i := 0; i < l1; i++ {
-			G[offset][l1*block+l2+i] = g1[i]
-		}
-	}
-
-	return G
-}
-
 type CipherText struct {
 	C   [][]float64 // m x N matrix
 	// c0 [][]float64 // 1 x N row
@@ -61,7 +30,7 @@ func Encrypt(epk ExtendedPublicKey, msg uint8, pp PublicParams) CipherText {
 	l2 := pp.GetL2()
 
 	R := utils.SampleUniformMatrix(m, N, 2)	// [][]float64 of size m x N
-	G := GadgetMatrix(p, q, n, N, l1, l2)	// [][]float64 of size (n+1) x N
+	G := utils.GadgetMatrix(p, q, n, N, l1, l2)	// [][]float64 of size (n+1) x N
 
 	BT := utils.Transpose(epk.GetMatrix())	// [][]float64 of size (n+1) x m
 

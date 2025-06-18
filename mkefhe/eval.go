@@ -53,3 +53,25 @@ func CipherMult(C1, C2 CipherText, parameters PublicParams) CipherText{
 		C : Cmult,
 	}
 }
+
+func CipherNand(C1, C2 CipherText, parameters PublicParams) CipherText {
+	c1 := C1.GetC()
+	c2 := C2.GetC()
+
+	GinvC2 := utils.Ginv(c2, parameters.GetL1(), parameters.GetL2(), parameters.GetSmallN())
+
+	Cnand := utils.SubtractMatrices(utils.GadgetMatrix(parameters.GetP(), parameters.GetQ(), parameters.GetSmallN(), parameters.GetBigN(), parameters.GetL1(), parameters.GetL2()), utils.MultiplyMatrices(c1, GinvC2))
+
+	for i := 0; i < len(Cnand[0]); i++ {
+		Cnand[0][i] = utils.UnsignedMod(Cnand[0][i], float64(parameters.GetP()))
+	}
+	for i := 1; i < len(Cnand); i++ {
+		for j := 0; j < len(Cnand[i]); j++ {
+			Cnand[i][j] = utils.UnsignedMod(Cnand[i][j], float64(parameters.GetQ()))
+		}
+	}
+
+	return CipherText{
+		C : Cnand,
+	}
+}
