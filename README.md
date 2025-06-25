@@ -14,8 +14,6 @@ mkefhe_lwr/
 └── README.md       # Project documentation
 ```
 
-text
-
 ## Getting Started
 
 ### Prerequisites
@@ -58,4 +56,3 @@ Pull requests and issues are welcome! Please fork the repository and submit your
 
 [mohak-7](https://github.com/mohak-7)
 
----
