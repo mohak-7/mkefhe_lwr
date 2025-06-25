@@ -56,3 +56,8 @@ Pull requests and issues are welcome! Please fork the repository and submit your
 
 [mohak-7](https://github.com/mohak-7)
 
+## References
+
+Mansi Goyal and Aditi Kar Gangopadhyay. 2025. Key Extension: Multi-Key
+FHE Utilizing LWR. In *ACM Asia Conference on Computer and Communications Security (ASIA CCS ’25), 2025, Hanoi, Vietnam.* ACM,
+New York, NY, USA, 14 pages. https://doi.org/10.1145/3708821.3736209
