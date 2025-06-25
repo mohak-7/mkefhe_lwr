@@ -40,7 +40,7 @@ text
 To run the application:
 
 ```
-go run main.g
+go run main.go
 ```
 
 To build and execute:
