@@ -1,7 +1,7 @@
 package mkefhe
 
 import (
-	"fmt"
+	// "fmt"
 	"mkefhe_lwr/utils"
 )
 
@@ -10,9 +10,11 @@ func CipherAdd(c1, c2 CipherText, parameters PublicParams) CipherText {
 	c2C := c2.GetC()
 	Cadd := utils.AddMatrices(c1C, c2C)
 
+	// the first row of Cadd should be reduced modulo p
 	for i := 0; i < len(Cadd[0]); i++ {
 		Cadd[0][i] = utils.UnsignedMod(Cadd[0][i], float64(parameters.GetP()))
 	}
+
 	// the remaining rows of Cadd should be reduced modulo q
 	for i := 1; i < len(Cadd); i++ {
 		for j := 0; j < len(Cadd[i]); j++ {
@@ -32,7 +34,6 @@ func CipherMult(C1, C2 CipherText, parameters PublicParams) CipherText{
 
 	// Multiply c1 with Ginv(c2)
 	Cmult := utils.MultiplyMatrices(c1, GinvC2)
-	fmt.Println("Cmult dimension: ", len(Cmult), "x", len(Cmult[0]))
 
 	// the first row of Cmult should be reduced modulo p
 	for i := 0; i < len(Cmult[0]); i++ {
@@ -45,9 +46,6 @@ func CipherMult(C1, C2 CipherText, parameters PublicParams) CipherText{
 			Cmult[i][j] = utils.UnsignedMod(Cmult[i][j], float64(parameters.GetQ()))
 		}
 	}
-
-	// fmt.Println(Cmult)
-	// fmt.Println("Cmult dimension: ", len(Cmult), "x", len(Cmult[0]))
 
 	return CipherText{
 		C : Cmult,
@@ -62,9 +60,12 @@ func CipherNand(C1, C2 CipherText, parameters PublicParams) CipherText {
 
 	Cnand := utils.SubtractMatrices(utils.GadgetMatrix(parameters.GetP(), parameters.GetQ(), parameters.GetSmallN(), parameters.GetBigN(), parameters.GetL1(), parameters.GetL2()), utils.MultiplyMatrices(c1, GinvC2))
 
+	// the first row of Cnand should be reduced modulo p
 	for i := 0; i < len(Cnand[0]); i++ {
 		Cnand[0][i] = utils.UnsignedMod(Cnand[0][i], float64(parameters.GetP()))
 	}
+
+	// the remaining rows of Cnand should be reduced modulo q
 	for i := 1; i < len(Cnand); i++ {
 		for j := 0; j < len(Cnand[i]); j++ {
 			Cnand[i][j] = utils.UnsignedMod(Cnand[i][j], float64(parameters.GetQ()))

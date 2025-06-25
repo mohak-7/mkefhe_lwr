@@ -4,8 +4,6 @@ import (
 	"mkefhe_lwr/utils"
 )
 
-// "mkefhe_lwr/utils"
-
 type ExtendedPublicKey struct {
 	matrix [][]float64 // m x (n+1) matrix
 }

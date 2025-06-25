@@ -19,38 +19,20 @@ type PublicParams struct {
 }
 
 func DefaultParams() PublicParams {
-	q := uint64(1 << 16) // q = 2^15 = 32768
-	p := uint64(1 << 11)  // p = 2^8 = 256
-	n := 8             // Lattice dimension 256
+	q := uint64(1 << 16) // modulus q
+	p := uint64(1 << 11)  // modulus p < q
+	n := 8             // Lattice dimension
 
 	k := 10              
 
 	l1 := int(math.Ceil(math.Log2(float64(q))))
 	l2 := int(math.Ceil(math.Log2(float64(p))))
-	// m := int(1 * (float64(n)*float64(l1) + float64(l2))) 
 	m := n*l1 + l2 // big oh
 
 	N := n*l1 + l2
 
 	A := utils.SampleUniformMatrix(m, n, q)
 
-
-	// print A in a format which can be copy-pasted into a python file
-	// fmt.Print("A = [")
-	// for i := 0; i < len(A); i++ {
-	// 	fmt.Print("[")
-	// 	for j := 0; j < len(A[i]); j++ {
-	// 		fmt.Printf("%f", A[i][j])
-	// 		if j < len(A[i])-1 {
-	// 			fmt.Print(", ")
-	// 		}
-	// 	}
-	// 	fmt.Print("]")
-	// 	if i < len(A)-1 {
-	// 		fmt.Print(", ")
-	// 	}
-	// }
-	// fmt.Print("]")
 
 	return PublicParams {
 		q: q,

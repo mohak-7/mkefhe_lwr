@@ -7,8 +7,6 @@ import (
 
 type CipherText struct {
 	C   [][]float64 // m x N matrix
-	// c0 [][]float64 // 1 x N row
-	// c1 [][]float64 // n x N matrix
 }
 func (c CipherText) GetC() [][]float64 {
 	return c.C

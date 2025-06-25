@@ -12,7 +12,6 @@ type PublicKey struct {
 }
 
 type SecretKey struct {
-    // si64  [][]float64
 	Si    [][]float64
     Sk    [][]float64
 }
@@ -43,7 +42,7 @@ func KeyGen(pp PublicParams) (pkj PublicKey, skj SecretKey) {
     
     Asj := utils.MultiplyMatrices(Abar, sj) // m x 1 matrix
 
-    // bj = round(p * Asj / q) mod p
+    // compute bj = round(p * Asj / q) mod p
     bj := make([][]float64, m)
     for i := 0; i < m; i++ {
         bj[i] = make([]float64, 1)
@@ -78,33 +77,9 @@ func KeyGen(pp PublicParams) (pkj PublicKey, skj SecretKey) {
 
 
     skj = SecretKey{
-        // si64 : sj64,
 		Si : sj,
         Sk : sk,
-        // Vector: skVector,
     }
-
-    // // now we need to find (bj - p/q * Asj) mod p
-    // tempvar := make([][]float64, m)
-    // for i := 0; i < m; i++ {
-    //     tempvar[i] = make([]float64, 1)
-    //     tempvar[i][0] = utils.SignedMod(bj[i][0] - float64(p)*float64(Asj[i][0])/float64(q), float64(p))
-    // }
-    // fmt.Println("tempvar shape: ", len(tempvar), "x", len(tempvar[0]))
-    // fmt.Println("tempvar: ", tempvar)
-    // fmt.Println("----------------------------------")
-
-    // // Check if pksk is equal to tempvar
-    // for i := 0; i < m; i++ {
-    //     if math.Abs(pksk[i][0] - tempvar[i][0]) > 1e-9 { // Using a small epsilon for float comparison
-    //         fmt.Println("Error: pksk does not match tempvar at index", i)
-    //         fmt.Println("pksk[i][0]:", pksk[i][0], "tempvar[i][0]:", tempvar[i][0])
-    //         return PublicKey{}, SecretKey{} // Return empty keys on error
-    //     }
-    // }
-    // fmt.Println("pksk matches tempvar, key generation successful!")
-    // fmt.Println("----------------------------------")
-
 
     return pkj, skj
 }

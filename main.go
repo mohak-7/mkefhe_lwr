@@ -2,14 +2,9 @@ package main
 
 import (
 	"fmt"
-	// "math"
 	"math/rand"
 	"mkefhe_lwr/mkefhe"
-
-	// "mkefhe_lwr/utils"
 	"time"
-
-	// "golang.org/x/tools/go/expect"
 )
 
 func test(parameters mkefhe.PublicParams, sk1, sk2 mkefhe.SecretKey, epk mkefhe.ExtendedPublicKey, m1, m2 uint8) {
@@ -17,11 +12,11 @@ func test(parameters mkefhe.PublicParams, sk1, sk2 mkefhe.SecretKey, epk mkefhe.
 	fmt.Println("Message 2 : ", m2)
 
 	C1 := mkefhe.Encrypt(epk, m1, parameters)
-	// fmt.Println("C1 : ", C1)
 	C2 := mkefhe.Encrypt(epk, m2, parameters)
-	// fmt.Println("C2 : ", C2)
 
 	fmt.Println("Messages Encrypted")
+
+	// Please replace the operation below with the desired operation
 
 	// C := mkefhe.CipherAdd(C1, C2, parameters)
 	C := mkefhe.CipherMult(C1, C2, parameters)
@@ -36,13 +31,15 @@ func test(parameters mkefhe.PublicParams, sk1, sk2 mkefhe.SecretKey, epk mkefhe.
 
 	pd_arr := []float64{pd1, pd2}
 	result := (mkefhe.Decrypt(C, pd_arr, parameters))
+
+	// Please replace the expected value below with the expected value for the operation selected previously
+
 	// expected := ((m1 + m2) % 2)
 	expected := m1 * m2
 	// expected := 1-(m1 * m2) 
 
 	fmt.Println("Decryption Done")
 
-	// fmt.Println(utils.SignedMod(-15, 10))
 	fmt.Println("Observed result: ", result)
 	fmt.Println("Expected result: ", expected)
 	if (result) != expected {
@@ -53,16 +50,6 @@ func test(parameters mkefhe.PublicParams, sk1, sk2 mkefhe.SecretKey, epk mkefhe.
 func main() {
 	parameters := mkefhe.DefaultParams()
 
-	// sk1 := mkefhe.SecretKey{
-	// Si1:= [][]float64{{0}, {1}, {1}, {0}, {1}, {0}, {1}, {1}}
-	// Sk : [][]float64{},
-	// }
-	// sk2 := mkefhe.SecretKey{
-	// Si2 := [][]float64{{0}, {0}, {0}, {0}, {1}, {0}, {1}, {1}}
-	// Sk : [][]float64{},
-	// }
-	// fmt.Println(utils.SignedMod(-6.5, 3.0))
-
 	pk1, sk1 := mkefhe.KeyGen(parameters)
 	pk2, sk2 := mkefhe.KeyGen(parameters)
 
@@ -70,7 +57,6 @@ func main() {
 	for i := 0; i < parameters.GetM(); i++ {
 		R0[i] = make([]float64, parameters.GetBigN())
 	}
-
 
 	fmt.Println("Key Generated")
 
