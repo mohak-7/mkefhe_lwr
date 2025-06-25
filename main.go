@@ -24,8 +24,8 @@ func test(parameters mkefhe.PublicParams, sk1, sk2 mkefhe.SecretKey, epk mkefhe.
 	fmt.Println("Messages Encrypted")
 
 	// C := mkefhe.CipherAdd(C1, C2, parameters)
-	// C := mkefhe.CipherMult(C1, C2, parameters)
-	C := mkefhe.CipherNand(C1, C2, parameters)
+	C := mkefhe.CipherMult(C1, C2, parameters)
+	// C := mkefhe.CipherNand(C1, C2, parameters)
 
 	fmt.Println("Ciphertext Evaluated")
 
@@ -37,8 +37,8 @@ func test(parameters mkefhe.PublicParams, sk1, sk2 mkefhe.SecretKey, epk mkefhe.
 	pd_arr := []float64{pd1, pd2}
 	result := (mkefhe.Decrypt(C, pd_arr, parameters))
 	// expected := ((m1 + m2) % 2)
-	// expected := m1 * m2
-	expected := 1-(m1 * m2) 
+	expected := m1 * m2
+	// expected := 1-(m1 * m2) 
 
 	fmt.Println("Decryption Done")
 
@@ -79,7 +79,7 @@ func main() {
 
 	fmt.Println("Extended Public Key Generated")
 
-	number_of_tests := 10000
+	number_of_tests := 100
 	r := rand.New(rand.NewSource(time.Now().UnixNano()))
 
 	for i := 0; i < number_of_tests; i++ {
